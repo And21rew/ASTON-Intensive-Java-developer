@@ -4,22 +4,6 @@ import java.util.Objects;
 
 public class HashMapExample<Key, Value> {
 
-    private static class Element<Key, Value> {
-
-        final int hash;
-        final Key key;
-        Value value;
-        Element<Key, Value> next;
-
-        public Element(int hash, Key key, Value value, Element<Key, Value> next) {
-
-            this.hash = hash;
-            this.key = key;
-            this.value = value;
-            this.next = next;
-        }
-    }
-
     private static final float DEFAULT_LOAD_FACTOR = 0.75f;
     private static final int DEFAULT_CAPACITY = 16;
 
@@ -35,21 +19,6 @@ public class HashMapExample<Key, Value> {
         elements = new Element[DEFAULT_CAPACITY];
         size = 0;
         threshold = (int) (DEFAULT_CAPACITY * loadFactor);
-    }
-
-    private int getHash(Object key) {
-
-        return (key == null) ? 0 : key.hashCode();
-    }
-
-    private int getIndex(int hash, int length) {
-
-        return Math.abs(hash) % length;
-    }
-
-    private boolean isKeyMatch(Element<Key, Value> element, Key key, int hash) {
-
-        return element.hash == hash && (Objects.equals(key, element.key));
     }
 
     public int size() {
@@ -132,6 +101,21 @@ public class HashMapExample<Key, Value> {
         return null;
     }
 
+    private int getHash(Object key) {
+
+        return (key == null) ? 0 : key.hashCode();
+    }
+
+    private int getIndex(int hash, int length) {
+
+        return Math.abs(hash) % length;
+    }
+
+    private boolean isKeyMatch(Element<Key, Value> element, Key key, int hash) {
+
+        return element.hash == hash && (Objects.equals(key, element.key));
+    }
+
     private void resize() {
 
         var oldElements = elements;
@@ -158,5 +142,21 @@ public class HashMapExample<Key, Value> {
         }
 
         elements = newElements;
+    }
+
+    private static class Element<Key, Value> {
+
+        final int hash;
+        final Key key;
+        Value value;
+        Element<Key, Value> next;
+
+        public Element(int hash, Key key, Value value, Element<Key, Value> next) {
+
+            this.hash = hash;
+            this.key = key;
+            this.value = value;
+            this.next = next;
+        }
     }
 }

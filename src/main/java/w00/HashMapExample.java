@@ -26,7 +26,7 @@ public class HashMapExample<Key, Value> {
         return size;
     }
 
-    public void put(Key key, Value value) {
+    public Value put(Key key, Value value) {
 
         int hash = getHash(key);
         int index = getIndex(hash, elements.length);
@@ -36,8 +36,9 @@ public class HashMapExample<Key, Value> {
         while (elementInIndex != null) {
 
             if (isKeyMatch(elementInIndex, key, hash)) {
+                Value oldValue = elementInIndex.value;
                 elementInIndex.value = value;
-                return;
+                return oldValue;
             }
 
             elementInIndex = elementInIndex.next;
@@ -48,6 +49,8 @@ public class HashMapExample<Key, Value> {
 
         if (size >= threshold)
             resize();
+
+        return null;
     }
 
     public Value get(Key key) {
@@ -108,7 +111,7 @@ public class HashMapExample<Key, Value> {
 
     private int getIndex(int hash, int length) {
 
-        return Math.abs(hash) % length;
+        return Math.floorMod(hash, length);
     }
 
     private boolean isKeyMatch(Element<Key, Value> element, Key key, int hash) {
